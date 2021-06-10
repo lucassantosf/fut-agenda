@@ -1,0 +1,14 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+
+.df-ali-jusc{
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
+
+.w-25{
+    max-width: 25%;
+}
