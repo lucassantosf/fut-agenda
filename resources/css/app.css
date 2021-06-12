@@ -27,3 +27,10 @@
     display: flex;
     justify-content: space-between;
 } 
+
+.players-pick{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+}

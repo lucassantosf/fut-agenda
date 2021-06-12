@@ -32113,6 +32113,13 @@ select {
   justify-content: space-between;
 }
 
+.players-pick{
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
@@ -187966,4 +187973,4 @@ select {
   .\32xl\:backdrop-sepia {
     --tw-backdrop-sepia: sepia(100%);
   }
-} 
+}

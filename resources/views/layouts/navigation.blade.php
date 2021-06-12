@@ -11,16 +11,13 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex"> 
 
                     <x-nav-link :href="route('player.index')" :active="request()->routeIs('player.index') || request()->routeIs('player.create') || request()->routeIs('player.edit')">
                         {{ __('Jogadores') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('match.index')" :active="request()->routeIs('match.index')">
+                    <x-nav-link :href="route('match.index')" :active="request()->routeIs('match.index') || request()->routeIs('match.create') || request()->routeIs('match.edit')">
                         {{ __('Partidas') }}
                     </x-nav-link>
                 </div>
