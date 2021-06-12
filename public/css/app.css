@@ -32098,6 +32098,21 @@ select {
   max-width: 25%;
 }
 
+.bg-red{
+  background-color: rgb(231, 50, 50) !important;
+}
+
+.bg-info{
+  background-color: rgb(80, 194, 247) !important;
+  color: #fff;
+}
+
+.header-form{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
@@ -187951,5 +187966,4 @@ select {
   .\32xl\:backdrop-sepia {
     --tw-backdrop-sepia: sepia(100%);
   }
-}
-
+} 

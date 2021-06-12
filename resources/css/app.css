@@ -12,3 +12,18 @@
 .w-25{
     max-width: 25%;
 }
+
+.bg-red{
+    background-color: rgb(231, 50, 50) !important;
+}
+
+.bg-info{
+    background-color: rgb(80, 194, 247) !important;
+    color: #fff;
+}
+
+.header-form{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+} 

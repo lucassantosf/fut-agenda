@@ -16,7 +16,7 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('player.index')" :active="request()->routeIs('player.index')">
+                    <x-nav-link :href="route('player.index')" :active="request()->routeIs('player.index') || request()->routeIs('player.create') || request()->routeIs('player.edit')">
                         {{ __('Jogadores') }}
                     </x-nav-link>
 

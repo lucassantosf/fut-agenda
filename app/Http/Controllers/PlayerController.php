@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Session;
+use App\Http\Requests\PlayerRequest;
 use Illuminate\Http\Request;
+use App\Models\Player;
+use Auth;
 
 class PlayerController extends Controller
 {
@@ -13,8 +17,8 @@ class PlayerController extends Controller
      */
     public function index()
     {
-        return view('player.index');
-        //
+        $itens = Player::paginate(20);
+        return view('player.index',compact('itens')); 
     }
 
     /**
@@ -24,7 +28,7 @@ class PlayerController extends Controller
      */
     public function create()
     {
-        //
+        return view('player.create'); 
     }
 
     /**
@@ -33,9 +37,29 @@ class PlayerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PlayerRequest $request)
     {
-        //
+        try {
+            $data = $request->all();
+            $user = Auth::user();
+
+            if(!empty($data['goalkeeper']) && $data['goalkeeper']=='on') {
+                $data['goalkeeper'] = 1;
+            }else{
+                $data['goalkeeper'] = 0;
+            }   
+
+            $user->players()->create($data);
+
+            Session::flash('message', 'O jogador foi salvo com sucesso!');
+            Session::flash('color', 'green');
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+            Session::flash('message', 'Não foi possível salvar o jogador!'); 
+            Session::flash('color', 'red');
+        }
+
+	    return redirect()->route('player.index');
     }
 
     /**
@@ -56,8 +80,15 @@ class PlayerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        //
+    { 
+        try {
+            $item = Player::findorFail($id);            
+        }catch(\Throwable $th){
+            Session::flash('message', 'Não foi possível editar o jogador!'); 
+            Session::flash('color', 'red');
+            return redirect()->route('player.index');
+        }
+        return view('player.edit',compact('item')); 
     }
 
     /**
@@ -67,9 +98,29 @@ class PlayerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PlayerRequest $request, $id)
     {
-        //
+        try {
+            $data = $request->all(); 
+            $item = Player::findorFail($id); 
+
+            if(!empty($data['goalkeeper']) && $data['goalkeeper']=='on') {
+                $data['goalkeeper'] = 1;
+            }else{
+                $data['goalkeeper'] = 0;
+            }        
+
+            $item->update($data);
+
+            Session::flash('message', 'O jogador foi editado com sucesso!');
+            Session::flash('color', 'green');
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+            Session::flash('message', 'Não foi possível salvar o jogador!'); 
+            Session::flash('color', 'red');
+        }
+
+	    return redirect()->route('player.index');
     }
 
     /**
@@ -79,7 +130,17 @@ class PlayerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        //
+    { 
+        try {
+            $item = Player::findorFail($id);       
+            $item->delete();     
+        }catch(\Throwable $th){
+            Session::flash('message', 'Não foi possível excluir o jogador!'); 
+            Session::flash('color', 'red');
+            return redirect()->route('player.index');
+        }
+        Session::flash('message', 'Jogador excluido com sucesso!'); 
+        Session::flash('color', 'red');
+        return redirect()->route('player.index'); 
     }
 }
