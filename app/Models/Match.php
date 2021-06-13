@@ -16,6 +16,24 @@ class Match extends Model
         'name'
     ]; 
 
+    // Append para data de criação da partida na listagem
+    protected $appends = [
+        'dataBR'
+    ];
+
+    public function getDataBRAttribute(){
+        $data= str_replace("-", "/", $this->created_at); 
+        return date("d/m/Y", strtotime($data));
+    }
+
+    public function teams(){ 
+        return $this->hasMany(Team::class,'match_id'); 
+    }
+
+
+    // Esse método é utilizado para validar os dados da pré-visualização dos times gerados
+    // ele valida a quantidade de goleiros baseados na quantidade de times gerados pela quantidade de jogadores permitidas
+    // se as validações passarem, gerar a lista no final do método
     public static function randomTeams($request){ 
         // Não permitir total de confirmados menor que Nj*2
         if(count($request->players) < $request->number * 2){                
@@ -53,13 +71,15 @@ class Match extends Model
             throw new \Exception("Número de goleiros é maior que o número de times, impossibilitando ter 1 goleiro por time ", 1);
         }
                 
-        //Sortear ordem de array
+        //Sortear ordem de array se as validações passarem
         shuffle($players);        
         $teams = Match::generateList($goalkeepers,$players,$players_number,$resto); 
         
         return $teams;
     }
 
+    // Este método auxilia a geração das listas de times e calcula o peso dos times
+    // irá gerar uma excessão enquanto os pesos dos times ficarem desequilibrados
     private static function generateList($goalkeepers,$players,$players_number,$resto){
         $team = Match::listPlayers($goalkeepers,$players,$players_number);                        
         $pesos = Match::calculateWeight($team,$resto); 
@@ -69,6 +89,8 @@ class Match extends Model
         return $team;
     }
 
+    // Este método somente organiza e formata a lista de times baseado no numero de jogadores permitidos por time
+    // e também pela quantidade de goleiros vindos do post e jogadores de linha
     private static function listPlayers($goalkeepers,$players,$players_number){
         $team = []; 
         //Distribuir o array de times, com no máximo 1 goleiro por time
@@ -99,6 +121,11 @@ class Match extends Model
         return $team;
     }
 
+    // Este método somente recebe a lista pronta de jogadores e faz o calculo dos pesos de cada um
+    // Ele irá considerar para o peso somente os times completos, vai pegar o time mais pesado e o menor
+    // Enquanto a diferença entre estes dois times for superior à 25% (valor que eu imagine como base) para considerar
+    // a diferença do time mais fraco para o mais forte, ele será chamado novamente pelo método generateList
+    // enquanto retornar false (diferença maior que 25%)
     private static function calculateWeight($team,$resto){
         foreach($team as $key => $equipe){
             $pesos[$key] = 0;

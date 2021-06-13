@@ -1,4 +1,5 @@
 <table>
+    <input type="hidden" value="{{json_encode($itens,true)}}" id="obj_json">
     @if(!empty($itens))
         @foreach($itens as $item) 
             <tr>

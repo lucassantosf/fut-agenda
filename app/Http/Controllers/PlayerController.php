@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Session;
 use App\Http\Requests\PlayerRequest;
 use Illuminate\Http\Request;
 use App\Models\Player;
+use App\Models\TeamPlayer;
 use Auth;
 
 class PlayerController extends Controller
@@ -54,23 +55,11 @@ class PlayerController extends Controller
             Session::flash('message', 'O jogador foi salvo com sucesso!');
             Session::flash('color', 'green');
         } catch (\Throwable $th) {
-            dd($th->getMessage());
             Session::flash('message', 'Não foi possível salvar o jogador!'); 
             Session::flash('color', 'red');
         }
 
 	    return redirect()->route('player.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -115,7 +104,6 @@ class PlayerController extends Controller
             Session::flash('message', 'O jogador foi editado com sucesso!');
             Session::flash('color', 'green');
         } catch (\Throwable $th) {
-            dd($th->getMessage());
             Session::flash('message', 'Não foi possível salvar o jogador!'); 
             Session::flash('color', 'red');
         }
@@ -132,10 +120,16 @@ class PlayerController extends Controller
     public function destroy($id)
     { 
         try {
-            $item = Player::findorFail($id);       
+            $item = Player::findorFail($id); 
+            
+            $check = TeamPlayer::where('player_id',$item->id)->first(); 
+            if(!empty($check)){
+                throw new \Exception("Este jogador possui vinculo em times, exclua as partidas em que ele participou primeiro", 1);
+            } 
+            
             $item->delete();     
-        }catch(\Throwable $th){
-            Session::flash('message', 'Não foi possível excluir o jogador!'); 
+        }catch(\Throwable $th){ 
+            Session::flash('message', 'Não foi possível excluir o jogador! Motivo : '.$th->getMessage()); 
             Session::flash('color', 'red');
             return redirect()->route('player.index');
         }

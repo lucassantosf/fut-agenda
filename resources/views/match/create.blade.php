@@ -41,7 +41,6 @@
                         </div>
 
                         <div class="flex justify-end mt-4">
-                            <button type="button" class="focus:outline-none openModal text-white text-sm py-2.5 px-5 mt-5 mx-5  rounded-md bg-green-500 hover:bg-green-600 hover:shadow-lg">Open Modal</button>
                             <x-button id="sort-teams">
                                 {{ __('Sortear') }}
                             </x-button>
@@ -53,7 +52,7 @@
         </div>
     </div>
 
-
+    <!-- Modal Feedback -->
     <div class="fixed z-10 inset-0 invisible overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="interestModal">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
@@ -63,7 +62,7 @@
                         <div class="sm:flex sm:items-start"> 
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                 <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                  Veja a previsualização dos times
+                                  
                                 </h3>
                             <div class="mt-2" id="feedback">
                                 
@@ -72,7 +71,7 @@
                     </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                    <button id="btn-send" disabled type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
                         Salvar
                     </button>
                     <button type="button" class="closeModal mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
@@ -82,13 +81,10 @@
             </div>
         </div>
     </div>
+    <!-- End Modal Feedback -->
 
-    <script>
+    <script type="text/javascript">
         $(document).on('ready',function(){
-
-            $('.openModal').on('click', function(e){
-                $('#interestModal').removeClass('invisible');
-            });
 
             $('.closeModal').on('click', function(e){
                 $('#interestModal').addClass('invisible');
@@ -101,33 +97,37 @@
                 $.ajax("{{route('sort_teams')}}", {
                     type: "POST",
                     data: $("#sort-teams-form").serialize(),
-                    success: response => {
-                        
-                        html = response      
-                        console.log(response)
-                        console.log(response.data)
-                        console.log(html)
+                    success: response => { 
+                        html = response       
 
                         $("#feedback").html(html);
+                        $("#modal-title").html('Veja a previsualização dos times'); 
+                        $("#btn-send").attr("disabled", false);
                         $('#interestModal').removeClass('invisible');
 
+                        handleSubmit()
                     },
                     error: (response,status) => {
-                        console.log(status)
-                        console.log(response)
-                        console.log(response.responseJSON)
-                        console.log(response.responseJSON.errors)
-                        const temp = response.responseJSON.errors;
-                        const messages = Object.keys(temp).map(key => temp[key]);
-                        html = '<div class="alert alert-danger">';
+                           
+                        $("#btn-send").attr("disabled", true); 
+                        const error = response.responseJSON
 
-                        messages.map(msg => {
-                            html += `${msg} <br/>`;
-                        });
-                        html += "</div>";
+                        try {
+                            const temp = response.responseJSON.errors
+                            const messages = Object.keys(temp).map(key => temp[key])
+                            
+                            html = ''
+                            messages.map(msg => {
+                                html += `${msg} <br/>`
+                            });
 
-                        $("#feedback").html(html);
-                        $('#interestModal').removeClass('invisible');
+                        } catch (error) {
+                            html = response.responseJSON 
+                        }
+ 
+                        $("#feedback").html(html)
+                        $("#modal-title").html('Oppss !')
+                        $('#interestModal').removeClass('invisible')
                     }
                 });
 
@@ -135,6 +135,60 @@
 
         })
 
+        function handleSubmit(){
+
+            $("#btn-send").on("click", (e)=>{
+                 
+                var token =  $('input[name="_token"]').attr('value')
+                var name =  $('#name').val()
+                var number =  $('#number').val()
+
+                console.log('submit',name,number,token)
+
+                $.ajax("{{route('match.store')}}", {
+                    type: "POST",
+                    headers:{
+                        'X-CSRF-Token': token 
+                    },
+                    data: {
+                        name,
+                        number,
+                        players: JSON.parse($("#obj_json").val()),
+                    },
+                    success: response => { 
+  
+                        alert('Times salvos com sucesso!'); 
+                        window.location.href = '{{route("match.index")}}'
+
+                    },
+                    error: (response,status) => {
+                           
+                        $("#btn-send").attr("disabled", true); 
+                        const error = response.responseJSON
+
+                        try {
+                            const temp = response.responseJSON.errors
+                            const messages = Object.keys(temp).map(key => temp[key])
+                            
+                            html = ''
+                            messages.map(msg => {
+                                html += `${msg} <br/>`
+                            });
+
+                        } catch (error) {
+                            html = response.responseJSON 
+                        }
+ 
+                        $("#feedback").html(html)
+                        $("#modal-title").html('Oppss !')
+                        $('#interestModal').removeClass('invisible')
+
+                    }
+                });
+
+            });
+
+        } 
     </script>
     
 </x-app-layout>

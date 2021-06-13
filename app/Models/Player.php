@@ -16,5 +16,5 @@ class Player extends Model
         'name',
         'level',
         'goalkeeper'
-    ]; 
+    ];  
 }

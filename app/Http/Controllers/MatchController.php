@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MatchRequest;
+use App\Http\Requests\MatchSortRequest;
 use Illuminate\Http\Request;
 use App\Models\Match;
 use App\Models\Player;
+use App\Models\TeamPlayer;
+
+use Auth;
+use Session;
 
 class MatchController extends Controller
-{
+{ 
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +21,7 @@ class MatchController extends Controller
      */
     public function index()
     {
-        $itens = Match::paginate(20);
+        $itens = Match::paginate(1);
         return view('match.index',compact('itens')); 
     }
 
@@ -36,9 +42,10 @@ class MatchController extends Controller
      *
      * @return \Illuminate\Http\Response json
      */
-    public function sort_teams(Request $request){
+    public function sort_teams(MatchRequest $request){
         try {   
-            $itens = Match::randomTeams($request);                    
+            // Sortear no modelo as listas aleatórias de jogadores
+            $itens = Match::randomTeams($request);   
             return view('match.preview',compact('itens'));
         } catch (\Throwable $th) {
             $response = $th->getMessage();
@@ -53,21 +60,27 @@ class MatchController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MatchRequest $request)
     {
         $data = $request->all();
-        dd($data);
+        
         try {
-            
             $user = Auth::user();
+            $match = $user->matchs()->create([
+                'name'=>$request->name
+            ]);
 
-            $user->players()->create($data);
+            foreach($request->players as $team){
+                $tea = $match->teams()->create(['user_id'=>$user->id]);                
+                foreach($team as $player){ 
+                    $tea->players()->create(['player_id'=>$player['id']]);
+                }                
+            }   
 
-            Session::flash('message', 'O jogador foi salvo com sucesso!');
+            Session::flash('message', 'A partida foi salva com sucesso!');
             Session::flash('color', 'green');
         } catch (\Throwable $th) {
-            dd($th->getMessage());
-            Session::flash('message', 'Não foi possível salvar o jogador!'); 
+            Session::flash('message', 'Não foi possível salvar a partida!'); 
             Session::flash('color', 'red');
         }
 
@@ -80,61 +93,19 @@ class MatchController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    { 
         try {
-            $item = Player::findorFail($id);            
+            $item = Match::findorFail($request->id);  
+            $teams = $item->teams()->with('players')->get(); 
         }catch(\Throwable $th){
-            Session::flash('message', 'Não foi possível editar o jogador!'); 
+            Session::flash('message', 'Não foi possível visualizar a partida!'); 
             Session::flash('color', 'red');
-            return redirect()->route('player.index');
+            return redirect()->route('match.index');
         }
-        return view('match.edit',compact('item')); 
+        return view('match.show',compact('teams'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(PlayerRequest $request, $id)
-    {
-        try {
-            $data = $request->all(); 
-            $item = Player::findorFail($id); 
-
-            if(!empty($data['goalkeeper']) && $data['goalkeeper']=='on') {
-                $data['goalkeeper'] = 1;
-            }else{
-                $data['goalkeeper'] = 0;
-            }        
-
-            $item->update($data);
-
-            Session::flash('message', 'O jogador foi editado com sucesso!');
-            Session::flash('color', 'green');
-        } catch (\Throwable $th) {
-            dd($th->getMessage());
-            Session::flash('message', 'Não foi possível salvar o jogador!'); 
-            Session::flash('color', 'red');
-        }
-
-	    return redirect()->route('match.index');
-    }
-
+  
     /**
      * Remove the specified resource from storage.
      *
@@ -144,14 +115,20 @@ class MatchController extends Controller
     public function destroy($id)
     { 
         try {
-            $item = Player::findorFail($id);       
-            $item->delete();     
+            $item = Match::findorFail($id); 
+
+            //deletar dados relacionados
+            $arr = $item->teams()->pluck('id')->toArray();
+            $data = TeamPlayer::whereIn('team_id',$arr)->delete();  
+            $item->delete();
+
         }catch(\Throwable $th){
-            Session::flash('message', 'Não foi possível excluir o jogador!'); 
+            
+            Session::flash('message', 'Não foi possível excluir a partida!'); 
             Session::flash('color', 'red');
-            return redirect()->route('player.index');
+            return redirect()->route('match.index');
         }
-        Session::flash('message', 'Jogador excluido com sucesso!'); 
+        Session::flash('message', 'Partida excluida com sucesso!'); 
         Session::flash('color', 'red');
         return redirect()->route('match.index'); 
     }

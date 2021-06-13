@@ -53,7 +53,11 @@
                     </x-table>
                 </div>
             </div>
+            
+            {{$itens->appends(Request::except('_token'))->links()}}
+
         </div>
     </div>
+
     
 </x-app-layout>

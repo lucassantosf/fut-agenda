@@ -16,7 +16,7 @@ class CreatePlayersTable extends Migration
         Schema::create('players', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id'); 
-            $table->foreign('user_id')->references('id')->on('users'); 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');; 
             $table->string('name'); 
             $table->integer('level')->default(1); 
             $table->boolean('goalkeeper')->default(0);  

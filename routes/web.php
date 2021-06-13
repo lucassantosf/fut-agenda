@@ -21,12 +21,9 @@ Route::group(['prefix'=>'/dashboard','middleware'=>'auth'], function() {
     })->name('dashboard');
 
 	Route::resource('match', MatchController::class);
-
     Route::post('match-sort-team', [MatchController::class,'sort_teams'])->name('sort_teams');
-
+    Route::post('match-show', [MatchController::class,'show'])->name('match.show.table');
 	Route::resource('player', PlayerController::class);
-
-
 });
  
   

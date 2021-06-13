@@ -44,4 +44,8 @@ class User extends Authenticatable
     public function players(){ 
         return $this->hasMany(Player::class,'user_id'); 
     }
+
+    public function matchs(){ 
+        return $this->hasMany(Match::class,'user_id'); 
+    }
 }
