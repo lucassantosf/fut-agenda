@@ -1,62 +1,110 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Fut Agenda 
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este repositório contém os arquivos de uma aplicação, chamada carinhosamente por 'Fut-Agenda', que pode cadastrar jogadores de futebol society e sortear equipes, baseado em um número fixo de jogadores permitidos por time, levando em consideração o nível de habilidade de cada atleta. Segue a descrição do desafio:
 
-## About Laravel
+Um grupo de amigos, desenvolvedores, resolveram jogar futebol toda semana em um campo Society de 
+Poços de Caldas. 
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Após montar um grupo no WhatsApp com 25 pessoas, perceberam duas coisas:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. Em média 15 a 17 pessoas confirmavam presença no jogo.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+2. Sempre perdiam 10 minutos de jogo para escolher os times com 5 jogadores de linha e 1 goleiro.
+Logo ficou claro que poderiam desenvolver uma aplicação que sorteasse as equipes, com base nas 
+habilidades de cada jogador e assim poupar tempo.
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Foi utilizado o [Laravel Framework](https://laravel.com/) versão 8 e o deploy da aplicação foi feita na Heroku
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+[Clique aqui para ver](http://fut-agenda.herokuapp.com/login)
 
-## Laravel Sponsors
+Seguem abaixo os requisitos e procedimentos para instalação do projeto em ambiente de desenvolvimento, e observações gerais:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Premium Partners
+## Requisitos de Ambiente
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
+PHP >= 7.3 
 
-## Contributing
+MySql >= 5.7
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Phpmyadmin (Recomendado para criar e acessar banco de dados de forma visual no navegador)
+    
+[WampServer](https://www.wampserver.com/en/) (Recomendado pois este faz a instalação do servidor Apache PHP, Mysql, Phpmyadmin)
 
-## Code of Conduct
+[Composer](https://getcomposer.org/) 
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Como instalar o projeto 
 
-## Security Vulnerabilities
+<ul>
+    <li>Clone este repositório, e coloque a pasta do projeto na pasta pública do servidor PHP. 'C:\wamp64\www\*' caso utilizar o WampServer, 'C:\xampp\htdocs\*' caso utilizar o Xamp Server</li>
+    <li>Crie um banco de dados Mysql para o projeto</li>
+    <li>Acesse a pasta do projeto através de algum terminal de comandos, e crie um arquivo .env para a aplicação pelo comando: </li>
+</ul>
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    cp .env.example .env     
+<ul>
+    <li>Configure os campos do arquivo .env de acordo com algum editor de texto: </li>
+</ul>
 
-## License
+    APP_URL=http://localhost/fut-agenda/public/ (Url completa do projeto em seu ambiente)
+    DB_HOST=127.0.0.1 (com o host banco de dados)
+    DB_PORT=3306 (com a porta do host do banco de dados)
+    DB_DATABASE=desafio (com o nome do banco de dados)
+    DB_USERNAME=root (com o nome do usuário com acesso ao banco de dados) 
+    DB_PASSWORD= (com a senha do usuário com acesso ao banco de dados) 
+ <ul>
+    <li>Instale as  dependências do LARAVEL pelo comando: </li>
+ </ul> 
+ 
+    composer install    
+    
+<ul>
+    <li>Gere a chave da aplicação pelo comando: </li>
+</ul>
+    
+    php artisan key:generate
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+<ul>  
+    <li>Gere as tabelas do banco de dados executando o comando: </li>
+</ul>    
+    
+    php artisan migrate
+
+## Observações e Orientações
+
+Antes de tudo, para o usuário começar a usar o Fut Agenda, ele precisa se cadastrar e então fazer o login.
+
+Para sortear os times, é necessário que sejam cadastrados todos os jogadores primeiro. E isso pode ser feito no menu 'Jogadores'. Onde você pode cadastrar por nome, nível de habilidade e se é goleiro.
+
+<img src="/public/assets/criar-player.PNG"> 
+
+Ao entrar no menu de 'Partidas', é possivel primeiro visualizar o histórico de partidas salvas por aquele usuário.
+
+Para então sortear os times, o usuario precisa adicionar uma nova partida, descrevendo ela com nome, e definindo um número de jogadores por time. Depois, é necessário checar os jogadores que então marcaram a presença
+ 
+<img src="/public/assets/criar.PNG">
+
+## Validações esperadas ao sortear uma equipe
+
+Caso não sejam preenchidos os dados obrigatórios, será retornado na tela via modal, as mensagens informando o que falta para concluir:
+
+<img src="/public/assets/validacoes.PNG"> 
+
+Para atender os requisitos do projeto, as validações foram criadas para atende-los e foram feitas para que o retorno aconteça 
+
+neste mesmo modal, por exemplo, não permitir que um time tenha mais de 1 goleiro 
+
+<img src="/public/assets/goleiros.PNG"> 
+
+ou que os pesos das habilidades de cada time ficou desbalanceada
+
+<img src="/public/assets/desbalanceado.PNG"> 
+
+*Neste caso optei por mostrar dessa forma para ficar claro que o requisito de não gerar times muito fracos ou muito fortes foi atendido
+, e quando isto acontecer, é necessário que o usuário clique em sortear novamente.
+
+## Pré visualiação dos times sorteados 
+
+É permitido ao usuário pré visualizar os times e sortear novamente, e caso queira deixar registrado no histórico, basta clicar em 'salvar'
+
+<img src="/public/assets/gerado.PNG">  
