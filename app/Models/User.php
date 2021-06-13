@@ -46,6 +46,6 @@ class User extends Authenticatable
     }
 
     public function matchs(){ 
-        return $this->hasMany(Match:class,'user_id'); 
+        return $this->hasMany(Matche::class,'user_id'); 
     }
 }

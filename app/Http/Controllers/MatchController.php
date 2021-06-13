@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MatchRequest;
 use App\Http\Requests\MatchSortRequest;
 use Illuminate\Http\Request;
-use App\Models\Match;
+use App\Models\Matche;
 use App\Models\Player;
 use App\Models\TeamPlayer;
 
@@ -21,7 +21,7 @@ class MatchController extends Controller
      */
     public function index()
     {
-        $itens = Match::paginate(1);
+        $itens = Matche::paginate(1);
         return view('match.index',compact('itens')); 
     }
 
@@ -45,7 +45,7 @@ class MatchController extends Controller
     public function sort_teams(MatchRequest $request){
         try {   
             // Sortear no modelo as listas aleatórias de jogadores
-            $itens = Match::randomTeams($request);   
+            $itens = Matche::randomTeams($request);   
             return view('match.preview',compact('itens'));
         } catch (\Throwable $th) {
             $response = $th->getMessage();
@@ -96,7 +96,7 @@ class MatchController extends Controller
     public function show(Request $request)
     {
         try {
-            $item = Match::findorFail($request->id);  
+            $item = Matche::findorFail($request->id);  
             $teams = $item->teams()->with('players')->get(); 
         }catch(\Throwable $th){
             Session::flash('message', 'Não foi possível visualizar a partida!'); 
@@ -115,7 +115,7 @@ class MatchController extends Controller
     public function destroy($id)
     { 
         try {
-            $item = Match::findorFail($id); 
+            $item = Matche::findorFail($id); 
 
             //deletar dados relacionados
             $arr = $item->teams()->pluck('id')->toArray();

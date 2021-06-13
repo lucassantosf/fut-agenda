@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Match extends Model
+class Matche extends Model
 {
     use HasFactory;
 
@@ -73,7 +73,7 @@ class Match extends Model
                 
         //Sortear ordem de array se as validações passarem
         shuffle($players);        
-        $teams = Match::generateList($goalkeepers,$players,$players_number,$resto); 
+        $teams = Matche::generateList($goalkeepers,$players,$players_number,$resto); 
         
         return $teams;
     }
@@ -81,8 +81,8 @@ class Match extends Model
     // Este método auxilia a geração das listas de times e calcula o peso dos times
     // irá gerar uma excessão enquanto os pesos dos times ficarem desequilibrados
     private static function generateList($goalkeepers,$players,$players_number,$resto){
-        $team = Match::listPlayers($goalkeepers,$players,$players_number);                        
-        $pesos = Match::calculateWeight($team,$resto); 
+        $team = Matche::listPlayers($goalkeepers,$players,$players_number);                        
+        $pesos = Matche::calculateWeight($team,$resto); 
         if(!$pesos){
             throw new \Exception("Peso dos times ficou desbalanceado, tente novamente", 1);
         }
