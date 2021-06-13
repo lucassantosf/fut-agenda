@@ -90,9 +90,9 @@ Caso não sejam preenchidos os dados obrigatórios, será retornado na tela via 
 
 <img src="/public/assets/validacoes.PNG"> 
 
-Para atender os requisitos do projeto, as validações foram criadas para atende-los e foram feitas para que o retorno aconteça 
+Para atender os requisitos do projeto, as validações foram criadas para atende-los e foram feitas para que o retorno aconteça neste mesmo modal 
 
-neste mesmo modal, por exemplo, não permitir que um time tenha mais de 1 goleiro 
+Por exemplo, não permitir que um time tenha mais de 1 goleiro 
 
 <img src="/public/assets/goleiros.PNG"> 
 
@@ -101,7 +101,7 @@ ou que os pesos das habilidades de cada time ficou desbalanceada
 <img src="/public/assets/desbalanceado.PNG"> 
 
 *Neste caso optei por mostrar dessa forma para ficar claro que o requisito de não gerar times muito fracos ou muito fortes foi atendido
-, e quando isto acontecer, é necessário que o usuário clique em sortear novamente.
+, e quando isto acontecer, é necessário que o usuário clique em sortear novamente. O fator para considerar muito forte ou fraco, é a diferença percentual entre as equipe completadas, a mais fraca e forte, for superior à 25% de peso somatório das habilidades de seus integrantes. E quando isto ocorrer, é necessário ser sorteado novamente os times.
 
 ## Pré visualiação dos times sorteados 
 
