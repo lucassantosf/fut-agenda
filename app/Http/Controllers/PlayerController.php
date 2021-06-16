@@ -16,9 +16,10 @@ class PlayerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $itens = Player::paginate(20);
+        $user = $request->user();
+        $itens = $user->players()->paginate(20);
         return view('player.index',compact('itens')); 
     }
 

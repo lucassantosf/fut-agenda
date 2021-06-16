@@ -19,9 +19,10 @@ class MatchController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $itens = Matche::paginate(1);
+        $user = $request->user();
+        $itens =  $user->matchs()->paginate(10);
         return view('match.index',compact('itens')); 
     }
 
