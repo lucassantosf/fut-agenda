@@ -1,8 +1,8 @@
 # Fut Agenda 
 
-Este repositório contém os arquivos de uma aplicação, chamada carinhosamente por 'Fut-Agenda', que pode cadastrar jogadores de futebol society e sortear equipes, baseado em um número fixo de jogadores permitidos por time, levando em consideração o nível de habilidade de cada atleta. Segue a descrição do desafio:
+Este repositório contém os arquivos de uma aplicação, chamada por 'Fut-Agenda', que pode cadastrar jogadores de futebol society e sortear equipes, baseado em um número fixo de jogadores permitidos por time, levando em consideração o nível de habilidade de cada atleta. Segue a descrição do desafio:
 
-Um grupo de amigos, desenvolvedores, resolveram jogar futebol toda semana em um campo Society de 
+" Um grupo de amigos, desenvolvedores, resolveram jogar futebol toda semana em um campo Society de 
 Poços de Caldas. 
 
 Após montar um grupo no WhatsApp com 25 pessoas, perceberam duas coisas:
@@ -11,10 +11,9 @@ Após montar um grupo no WhatsApp com 25 pessoas, perceberam duas coisas:
 
 2. Sempre perdiam 10 minutos de jogo para escolher os times com 5 jogadores de linha e 1 goleiro.
 Logo ficou claro que poderiam desenvolver uma aplicação que sorteasse as equipes, com base nas 
-habilidades de cada jogador e assim poupar tempo.
+habilidades de cada jogador e assim poupar tempo."
 
-
-Foi utilizado o [Laravel Framework](https://laravel.com/) versão 8 e o deploy da aplicação foi feita na Heroku
+Foi utilizado o [Laravel Framework](https://laravel.com/) na versão 8 e o deploy da aplicação aconteceu na Heroku
 
 [Clique aqui para ver](http://fut-agenda.herokuapp.com/login)
 
@@ -36,14 +35,14 @@ Phpmyadmin (Recomendado para criar e acessar banco de dados de forma visual no n
 ## Como instalar o projeto 
 
 <ul>
-    <li>Clone este repositório, e coloque a pasta do projeto na pasta pública do servidor PHP. 'C:\wamp64\www\*' caso utilizar o WampServer, 'C:\xampp\htdocs\*' caso utilizar o Xamp Server</li>
+    <li>Clone este repositório, e coloque a pasta do projeto na pasta pública do servidor PHP. "C:\wamp64\www\*" caso utilizar o WampServer ou "C:\xampp\htdocs\*" caso utilizar o Xamp Server.</li>
     <li>Crie um banco de dados Mysql para o projeto</li>
-    <li>Acesse a pasta do projeto através de algum terminal de comandos, e crie um arquivo .env para a aplicação pelo comando: </li>
+    <li>Acesse a pasta do projeto através de algum terminal de comandos, e crie um arquivo .env para configurar as variáveis de ambiente, pelo comando: </li>
 </ul>
 
     cp .env.example .env     
 <ul>
-    <li>Configure os campos do arquivo .env de acordo com algum editor de texto: </li>
+    <li>Configure as seguintes variáveis do arquivo .env de acordo à seu ambiente, em algum editor de texto: </li>
 </ul>
 
     APP_URL=http://localhost/fut-agenda/public/ (Url completa do projeto em seu ambiente)
@@ -72,9 +71,9 @@ Phpmyadmin (Recomendado para criar e acessar banco de dados de forma visual no n
 
 ## Observações e Orientações
 
-Antes de tudo, para o usuário começar a usar o Fut Agenda, ele precisa se cadastrar e então fazer o login.
+Antes de tudo, para o usuário começar a usar o Fut Agenda, ele precisa cadastrar-se e fazer o login.
 
-Para sortear os times, é necessário que sejam cadastrados todos os jogadores primeiro. E isso pode ser feito no menu 'Jogadores'. Onde você pode cadastrar por nome, nível de habilidade e se é goleiro.
+Para sortear os times, é necessário que sejam cadastrados todos os jogadores primeiro. E isso pode ser feito no menu 'Jogadores'. Onde você pode cadastra-los por nome, nível de habilidade e se é goleiro.
 
 <img src="/public/assets/criar-player.PNG"> 
 
@@ -90,9 +89,9 @@ Caso não sejam preenchidos os dados obrigatórios, será retornado na tela via 
 
 <img src="/public/assets/validacoes.PNG"> 
 
-Para atender os requisitos do projeto, as validações foram criadas para atende-los e foram feitas para que o retorno aconteça 
+Para atender os requisitos do projeto, as validações foram criadas para atende-los e o retorno delas vai ser exibido neste mesmo modal 
 
-neste mesmo modal, por exemplo, não permitir que um time tenha mais de 1 goleiro 
+Por exemplo, 'não permitir que um time tenha mais de 1 goleiro'
 
 <img src="/public/assets/goleiros.PNG"> 
 
@@ -101,7 +100,7 @@ ou que os pesos das habilidades de cada time ficou desbalanceada
 <img src="/public/assets/desbalanceado.PNG"> 
 
 *Neste caso optei por mostrar dessa forma para ficar claro que o requisito de não gerar times muito fracos ou muito fortes foi atendido
-, e quando isto acontecer, é necessário que o usuário clique em sortear novamente.
+, e quando isto acontecer, é necessário que o usuário clique em sortear novamente. O fator para considerar muito forte ou fraco, é a diferença percentual entre as equipe completadas, a mais fraca e forte, for superior à 25% de peso somatório das habilidades de seus integrantes. E quando isto ocorrer, é necessário ser sorteado novamente os times.
 
 ## Pré visualiação dos times sorteados 
 
